@@ -4,6 +4,7 @@ import shortid from 'shortid';
 import ContactForm from './components/ContactForm';
 import ContactList from './components/ContactList';
 import Filter from './components/Filter';
+import { number } from 'prop-types';
 
 class App extends Component {
   state = {
@@ -29,6 +30,14 @@ class App extends Component {
       number,
     };
 
+    const existContact = this.state.contacts.find(
+      newContact => newContact.name === contact.name,
+    );
+
+    if (existContact) {
+      return alert(`${existContact.name} is already in contacts`);
+    }
+
     this.setState(({ contacts }) => ({
       contacts: [contact, ...contacts],
     }));
@@ -38,19 +47,13 @@ class App extends Component {
     this.setState({ filter: e.currentTarget.value });
   };
 
-  visibleContacts = () => {
-    const { filter, contacts } = this.state;
-    const normilizeFilter = filter.toLowerCase();
-
-    return contacts.filter(contact =>
-      contact.text.toLowerCase().includes(normilizeFilter),
-    );
-  };
-
   render() {
-    const { contacts, filter } = this.state;
-    const visibleContacts = this.visibleContacts();
-
+    const { filter } = this.state;
+    const visibleContacts = this.state.contacts.filter(
+      ({ name, number }) =>
+        name.toLowerCase().includes(this.state.filter.toLowerCase()) ||
+        number.includes(this.state.filter),
+    );
     return (
       <div className="App">
         <h1>Phonebook</h1>
