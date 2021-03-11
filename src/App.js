@@ -47,13 +47,21 @@ class App extends Component {
     this.setState({ filter: e.currentTarget.value });
   };
 
+  getVisibleContacts = () => {
+    const { filter, contacts } = this.state;
+    const normalizedFilter = filter.toLowerCase();
+
+    return contacts.filter(
+      ({ name, number }) =>
+        name.toLowerCase().includes(normalizedFilter) ||
+        number.includes(normalizedFilter),
+    );
+  };
+
   render() {
     const { filter } = this.state;
-    const visibleContacts = this.state.contacts.filter(
-      ({ name, number }) =>
-        name.toLowerCase().includes(this.state.filter.toLowerCase()) ||
-        number.includes(this.state.filter),
-    );
+    const visibleContacts = this.getVisibleContacts();
+
     return (
       <div className="App">
         <h1>Phonebook</h1>
