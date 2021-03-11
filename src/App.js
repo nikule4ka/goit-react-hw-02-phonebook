@@ -4,7 +4,6 @@ import shortid from 'shortid';
 import ContactForm from './components/ContactForm';
 import ContactList from './components/ContactList';
 import Filter from './components/Filter';
-import { number } from 'prop-types';
 
 class App extends Component {
   state = {
@@ -50,7 +49,9 @@ class App extends Component {
   getVisibleContacts = () => {
     const { filter, contacts } = this.state;
     const normalizedFilter = filter.toLowerCase();
-
+    if (!filter.trim()) {
+      return contacts;
+    }
     return contacts.filter(
       ({ name, number }) =>
         name.toLowerCase().includes(normalizedFilter) ||
